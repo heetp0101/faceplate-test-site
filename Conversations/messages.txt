@@ -1,4 +1,5 @@
-DEPLOY: mysite TO: devs
+DEPLOY: mysite TO: dev
+
 
 
 
