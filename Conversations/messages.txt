@@ -1,1 +1,2 @@
-DEPLOY: mysite TO: dev
+Hello world
+
