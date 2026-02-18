@@ -1,1 +1,3 @@
 DEPLOY: mysite TO: dev
+
+DEPLOYED: mysite TO: dev AT: 2026-02-18 17:34 URL: http://heet-faceplate-dev.s3-website.ap-south-1.amazonaws.com/mysite/
