@@ -1,0 +1,32 @@
+name: Faceplate ChatOps Deploy
+on:
+  repository_dispatch:
+    types: [chatops-deploy]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build and Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-south-1'
+          SITE_NAME: ${{ github.event.client_payload.site_name }}
+          ENV: ${{ github.event.client_payload.environment }}
+        run: |
+          npm install
+          npm run build
+          # Sync to S3
+          aws s3 sync ./dist s3://heet-faceplate-$ENV/$SITE_NAME --delete
+          # Invalidation
+          DIST_ID="E2QOC59EK5LGU4" # Use your Dev ID
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/*"
